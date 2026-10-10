@@ -1,0 +1,40 @@
+# ==========================================================================
+#  作品データ
+#  上から書いた順は「日付が同じ作品同士の並び順」になります。
+#
+#  テンプレート（コピーして下に追加してください）
+#
+#  - id: sample-project                 # 固有ID（英数字・ハイフン）。URL /works/sample-project/ になります
+#    title: 作品タイトル
+#    type: Graphic Design / Poster      # 一覧・詳細に表示する制作タイプ
+#    category: graphic                  # graphic / video / web / others
+#    date: "2026.10.01"                 # 公開日。"YYYY" / "YYYY.MM" / "YYYY.MM.DD"。必ず "" で囲む
+#    duration: 2週間                     # 製作期間（省略可）
+#    client: クライアント名               # クライアント（省略可）
+#    thumbnail: images/sample.webp      # 一覧・OGP用サムネイル（public 以下）
+#    description: |                     # 説明（省略可）。| を使うと複数行で書けます
+#      1行目
+#      2行目
+#    media:                             # 詳細に表示するメディア。複数並べるとギャラリーになります
+#      - type: image                    # image / youtube / x
+#        src: images/sample-full.webp   # 画像パス / YouTube URL / X投稿URL
+#        alt: 作品画像の説明              # 画像の代替テキスト（image のみ）
+#      - type: youtube
+#        src: https://youtu.be/xxxxxxxxxxx
+#
+#  ※ 値に「: 」や「#」を含む場合は "" で囲んでください。
+# ==========================================================================
+
+- id: gra-001
+  title: poster
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.10.01"
+  duration: 1日
+  client: revati
+  thumbnail: images/gra-001.webp
+  description: 告知画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-001.webp
+      alt: esports poster

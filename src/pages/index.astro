@@ -1,0 +1,349 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WorkDetail from "../components/WorkDetail.astro";
+import Lightbox from "../components/Lightbox.astro";
+import { categoryKeys, categoryLabels } from "../data/site";
+import { assetUrl, getWorks, thumbnailAlt } from "../lib/works";
+
+const works = await getWorks();
+const filters = [
+    { key: "all", label: "すべて" },
+    ...categoryKeys.map((key) => ({ key, label: categoryLabels[key] }))
+];
+---
+
+<BaseLayout>
+    <section class="toolbar" aria-label="作品の検索・絞り込み・並び替え">
+        <label class="search">
+            <span class="sr-only">検索</span>
+            <input id="searchInput" type="search" placeholder="検索する" autocomplete="off">
+        </label>
+
+        <nav class="filters" aria-label="カテゴリで絞り込み">
+            {filters.map(({ key, label }, i) => (
+                <button
+                    class:list={["filter", { active: i === 0 }]}
+                    type="button"
+                    data-category={key}
+                    aria-pressed={i === 0 ? "true" : "false"}
+                >{label}</button>
+            ))}
+        </nav>
+
+        <button class="sort-toggle" id="sortToggle" type="button"
+            aria-label="並び順：新しい順（クリックで古い順に切り替え）">
+            <span class="sort-toggle__label">新しい順</span>
+            <span class="sort-toggle__icon" aria-hidden="true">↓</span>
+        </button>
+    </section>
+
+    <section class="portfolio" id="portfolio">
+        {works.map((work) => (
+            <article
+                class="project"
+                data-work-id={work.id}
+                data-title={work.data.title}
+                data-category={work.data.category}
+                data-search={work.search}
+                data-date={work.dateKey}
+                data-order={work.order}
+            >
+                <a href={work.path} class="project-link" aria-label={`${work.data.title} — ${work.data.type}`}>
+                    <div class="image-wrap">
+                        <img src={assetUrl(work.data.thumbnail)} alt={thumbnailAlt(work)} loading="lazy" decoding="async" />
+                    </div>
+                    <div class="meta">
+                        <span>{work.data.title}</span>
+                        <span>{work.data.type} · {work.year}</span>
+                    </div>
+                </a>
+            </article>
+        ))}
+    </section>
+
+    <p class="empty" id="emptyState" hidden>該当する作品がありません。</p>
+    <p class="sr-only" id="resultStatus" aria-live="polite"></p>
+
+    <!-- 作品詳細の中身（モーダルを開いたときに複製して表示） -->
+    {works.map((work) => (
+        <template id={`work-template-${work.id}`}>
+            <WorkDetail work={work} headingTag="h2" />
+        </template>
+    ))}
+
+    <!-- 作品詳細モーダル -->
+    <dialog class="work-modal" id="workModal">
+        <div class="work-modal__panel">
+            <button class="work-modal__close" type="button" aria-label="作品詳細を閉じる" data-modal-close>×</button>
+            <div class="work-modal__content" id="workModalContent"></div>
+
+            <nav class="work-nav" aria-label="作品の移動">
+                <button class="work-nav__link work-nav__link--prev" type="button" data-work-nav="prev">
+                    <span class="work-nav__label">← 前の作品</span>
+                    <span class="work-nav__title"></span>
+                </button>
+                <button class="work-nav__link work-nav__link--next" type="button" data-work-nav="next">
+                    <span class="work-nav__label">次の作品 →</span>
+                    <span class="work-nav__title"></span>
+                </button>
+            </nav>
+        </div>
+    </dialog>
+
+    <Lightbox />
+</BaseLayout>
+
+<script>
+    import { isNavigationKey, loadXWidgets, onSwipe } from "../scripts/ui";
+
+    const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+    const siteTitle = document.title;
+
+    const portfolio = document.querySelector<HTMLElement>("#portfolio")!;
+    const cards = [...document.querySelectorAll<HTMLElement>(".project")];
+    const searchInput = document.querySelector<HTMLInputElement>("#searchInput")!;
+    const filterButtons = [...document.querySelectorAll<HTMLButtonElement>(".filter")];
+    const sortToggle = document.querySelector<HTMLButtonElement>("#sortToggle")!;
+    const emptyState = document.querySelector<HTMLElement>("#emptyState")!;
+    const resultStatus = document.querySelector<HTMLElement>("#resultStatus")!;
+
+    const modal = document.querySelector<HTMLDialogElement>("#workModal")!;
+    const modalPanel = modal.querySelector<HTMLElement>(".work-modal__panel")!;
+    const modalContent = document.querySelector<HTMLElement>("#workModalContent")!;
+    const navButtons = {
+        prev: modal.querySelector<HTMLButtonElement>('[data-work-nav="prev"]')!,
+        next: modal.querySelector<HTMLButtonElement>('[data-work-nav="next"]')!
+    };
+    const lightbox = document.querySelector<HTMLDialogElement>("#lightbox");
+
+    /* ======================================================================
+       絞り込み・並び替え（状態は URL の ?category= &sort= &q= に保存）
+       ====================================================================== */
+
+    type SortOrder = "desc" | "asc";
+    const categories = filterButtons.map((button) => button.dataset.category!);
+    const state = { category: "all", sort: "desc" as SortOrder, query: "" };
+
+    function readStateFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category") ?? "all";
+        state.category = categories.includes(category) ? category : "all";
+        state.sort = params.get("sort") === "asc" ? "asc" : "desc";
+        state.query = params.get("q") ?? "";
+    }
+
+    function listUrl() {
+        const params = new URLSearchParams();
+        if (state.category !== "all") params.set("category", state.category);
+        if (state.sort === "asc") params.set("sort", "asc");
+        if (state.query.trim()) params.set("q", state.query.trim());
+        const query = params.toString();
+        return `${base}${query ? `?${query}` : ""}`;
+    }
+
+    function syncUrl() {
+        if (!modal.open) history.replaceState(null, "", listUrl());
+    }
+
+    function applyFilter() {
+        const query = state.query.trim().toLowerCase();
+        let visible = 0;
+
+        cards.forEach((card) => {
+            const matchesCategory = state.category === "all" || card.dataset.category === state.category;
+            const matchesQuery = !query || (card.dataset.search ?? "").includes(query);
+            card.hidden = !(matchesCategory && matchesQuery);
+            if (!card.hidden) visible++;
+        });
+
+        filterButtons.forEach((button) => {
+            const isActive = button.dataset.category === state.category;
+            button.classList.toggle("active", isActive);
+            button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        emptyState.hidden = visible !== 0;
+        resultStatus.textContent = `${visible}件の作品を表示中`;
+    }
+
+    function applySort() {
+        const direction = state.sort === "asc" ? 1 : -1;
+        const sorted = [...cards].sort((a, b) => {
+            const diff = Number(a.dataset.date) - Number(b.dataset.date);
+            // 日付が同じ場合は works.yaml の記述順を保つ
+            return diff !== 0 ? diff * direction : Number(a.dataset.order) - Number(b.dataset.order);
+        });
+        portfolio.append(...sorted);
+
+        const isAsc = state.sort === "asc";
+        sortToggle.querySelector(".sort-toggle__label")!.textContent = isAsc ? "古い順" : "新しい順";
+        sortToggle.querySelector(".sort-toggle__icon")!.textContent = isAsc ? "↑" : "↓";
+        sortToggle.setAttribute(
+            "aria-label",
+            `並び順：${isAsc ? "古い順" : "新しい順"}（クリックで${isAsc ? "新しい順" : "古い順"}に切り替え）`
+        );
+    }
+
+    searchInput.addEventListener("input", () => {
+        state.query = searchInput.value;
+        applyFilter();
+        syncUrl();
+    });
+
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            state.category = button.dataset.category ?? "all";
+            applyFilter();
+            syncUrl();
+        });
+    });
+
+    sortToggle.addEventListener("click", () => {
+        state.sort = state.sort === "desc" ? "asc" : "desc";
+        applySort();
+        syncUrl();
+    });
+
+    /* ======================================================================
+       作品詳細モーダル
+       開くと URL が /works/{id}/ になり、そのまま共有・リロードできます
+       ====================================================================== */
+
+    let currentId: string | null = null;
+    /** モーダルを開いたときに履歴を1つ積んだか（閉じるときに history.back() で戻す） */
+    let pushedHistory = false;
+
+    const cardOf = (id: string) => cards.find((card) => card.dataset.workId === id);
+    const workUrl = (id: string) => `${base}works/${encodeURIComponent(id)}/`;
+
+    /** 前後移動の対象：いま一覧に表示されている順。表示外の作品を開いている場合は全作品 */
+    function navigableIds() {
+        const ordered = [...portfolio.querySelectorAll<HTMLElement>(".project")];
+        const visible = ordered.filter((card) => !card.hidden);
+        const list = currentId && visible.some((card) => card.dataset.workId === currentId) ? visible : ordered;
+        return list.map((card) => card.dataset.workId!);
+    }
+
+    function neighbor(direction: "prev" | "next") {
+        if (!currentId) return null;
+        const ids = navigableIds();
+        const index = ids.indexOf(currentId);
+        return ids[index + (direction === "prev" ? -1 : 1)] ?? null;
+    }
+
+    function updateNav() {
+        (["prev", "next"] as const).forEach((direction) => {
+            const id = neighbor(direction);
+            const button = navButtons[direction];
+            button.disabled = !id;
+            button.querySelector(".work-nav__title")!.textContent = id ? cardOf(id)?.dataset.title ?? "" : "";
+        });
+    }
+
+    function openWork(id: string, historyMode: "push" | "replace" | "none" = "push") {
+        const template = document.getElementById(`work-template-${id}`);
+        if (!(template instanceof HTMLTemplateElement)) return false;
+
+        currentId = id;
+        modalContent.replaceChildren(template.content.cloneNode(true));
+        modal.setAttribute("aria-labelledby", `work-title-${id}`);
+        document.title = `${cardOf(id)?.dataset.title ?? ""} | ${siteTitle}`;
+        updateNav();
+        loadXWidgets(modalContent);
+
+        if (!modal.open) modal.showModal();
+        modalPanel.scrollTop = 0;
+
+        if (historyMode === "push") {
+            history.pushState({ workId: id }, "", workUrl(id));
+            pushedHistory = true;
+        } else if (historyMode === "replace") {
+            history.replaceState({ workId: id }, "", workUrl(id));
+        }
+        return true;
+    }
+
+    function cleanupModal() {
+        currentId = null;
+        modalContent.replaceChildren();
+        document.title = siteTitle;
+    }
+
+    /** 閉じる操作（×・背景クリック・Esc）。URL を一覧に戻す */
+    function requestClose() {
+        if (pushedHistory && history.state?.workId) {
+            history.back(); // → popstate で閉じる
+        } else {
+            modal.close();
+            history.replaceState(null, "", listUrl());
+        }
+    }
+
+    function go(direction: "prev" | "next") {
+        const id = neighbor(direction);
+        if (!id) return;
+        openWork(id, "replace");
+        // 端に到達してボタンが無効になるとフォーカスが外れるので、反対側へ逃がす
+        const button = navButtons[direction];
+        if (button.disabled) navButtons[direction === "prev" ? "next" : "prev"].focus();
+    }
+
+    // 一覧のカードクリック → モーダル（Ctrl/⌘クリック等は新しいタブで個別ページへ）
+    cards.forEach((card) => {
+        card.querySelector<HTMLAnchorElement>(".project-link")?.addEventListener("click", (event) => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            if (openWork(card.dataset.workId!, "push")) event.preventDefault();
+        });
+    });
+
+    modal.querySelector("[data-modal-close]")?.addEventListener("click", requestClose);
+    navButtons.prev.addEventListener("click", () => go("prev"));
+    navButtons.next.addEventListener("click", () => go("next"));
+
+    // 背景（パネルの外側）クリックで閉じる
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) requestClose();
+    });
+
+    // Esc：ダイアログ標準の閉じ方を止めて、URL も戻す
+    modal.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        requestClose();
+    });
+
+    modal.addEventListener("close", cleanupModal);
+
+    document.addEventListener("keydown", (event) => {
+        if (!modal.open || lightbox?.open) return;
+        const direction = isNavigationKey(event);
+        if (!direction) return;
+        event.preventDefault();
+        go(direction);
+    });
+
+    onSwipe(modalPanel, {
+        left: () => go("next"),
+        right: () => go("prev")
+    });
+
+    window.addEventListener("popstate", () => {
+        const id = history.state?.workId;
+        if (id && openWork(id, "none")) return;
+        pushedHistory = false;
+        lightbox?.close();
+        if (modal.open) modal.close();
+    });
+
+    /* ======================================================================
+       初期化
+       ====================================================================== */
+
+    readStateFromUrl();
+    searchInput.value = state.query;
+    applySort();
+    applyFilter();
+
+    // 旧形式のリンク（/?project=作品ID）にも対応
+    const legacyId = new URLSearchParams(window.location.search).get("project");
+    if (!legacyId || !openWork(legacyId, "replace")) syncUrl();
+</script>

@@ -1,0 +1,77 @@
+---
+/*
+ * 作品詳細の本体。個別ページ（/works/[id]/）と一覧のモーダルの両方で使います。
+ * ※ 一覧では <template> の中に置かれるため、このコンポーネントに <script> は書かないこと
+ */
+import { assetUrl, youtubeEmbedUrl, type Work } from "../lib/works";
+
+interface Props {
+    work: Work;
+    headingTag?: "h1" | "h2";
+}
+
+const { work, headingTag: Heading = "h2" } = Astro.props;
+const { title, type, date, duration, client, description, media } = work.data;
+const shareUrl = new URL(work.path, Astro.site ?? Astro.url).href;
+---
+
+<article class="work-detail" data-work-id={work.id}>
+    <div class="work-detail__header">
+        <div>
+            <p class="work-detail__eyebrow">{type}</p>
+            <Heading class="work-detail__title" id={`work-title-${work.id}`}>{title}</Heading>
+            {description && <p class="work-detail__description">{description}</p>}
+        </div>
+        <button class="work-detail__share" type="button" data-copy={shareUrl}>リンクをコピー</button>
+    </div>
+
+    <dl class="work-detail__specs">
+        <div><dt>公開日</dt><dd>{date}</dd></div>
+        <div><dt>製作期間</dt><dd>{duration || "未設定"}</dd></div>
+        <div><dt>クライアント</dt><dd>{client || "未設定"}</dd></div>
+    </dl>
+
+    <div class="work-detail__gallery">
+        {media.length === 0 && <p class="work-detail__note">メディアは準備中です。</p>}
+
+        {media.map((item) => {
+            if (item.type === "youtube") {
+                const embedUrl = youtubeEmbedUrl(item.src);
+                return embedUrl ? (
+                    <div class="work-media work-media--video">
+                        <iframe
+                            src={embedUrl}
+                            title={`${title} — YouTube動画`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                            loading="lazy"
+                        ></iframe>
+                    </div>
+                ) : (
+                    <p class="work-detail__note">YouTubeのURLが正しくありません：{item.src}</p>
+                );
+            }
+
+            if (item.type === "x") {
+                return (
+                    <div class="work-media work-media--x">
+                        <blockquote class="twitter-tweet" data-theme="dark" data-dnt="true">
+                            <a href={item.src}>投稿を読み込む</a>
+                        </blockquote>
+                    </div>
+                );
+            }
+
+            const src = assetUrl(item.src);
+            const alt = item.alt || title;
+            return (
+                <figure class="work-media work-media--image">
+                    <img src={src} alt={alt} loading="lazy" decoding="async" />
+                    <button class="work-media__fullscreen" type="button" data-lightbox-src={src} data-lightbox-alt={alt}>
+                        全画面表示 ↗
+                    </button>
+                </figure>
+            );
+        })}
+    </div>
+</article>

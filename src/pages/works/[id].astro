@@ -1,0 +1,83 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WorkDetail from "../../components/WorkDetail.astro";
+import Lightbox from "../../components/Lightbox.astro";
+import { assetUrl, getWorks, thumbnailAlt, type Work } from "../../lib/works";
+
+export const getStaticPaths = (async () => {
+    const works = await getWorks();
+    return works.map((work, i) => ({
+        params: { id: work.id },
+        props: { work, prev: works[i - 1] ?? null, next: works[i + 1] ?? null }
+    }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+    work: Work;
+    prev: Work | null;
+    next: Work | null;
+}
+
+const { work, prev, next } = Astro.props;
+const { title, type, description } = work.data;
+---
+
+<BaseLayout
+    title={title}
+    description={description || `${title}（${type}）`}
+    image={work.data.thumbnail}
+    imageAlt={thumbnailAlt(work)}
+    type="article"
+>
+    <div class="work-page" id="workPage">
+        <a class="work-page__back" href={assetUrl("")}>← 作品一覧へ</a>
+
+        <div class="work-page__panel">
+            <WorkDetail work={work} headingTag="h1" />
+
+            <nav class="work-nav" aria-label="作品の移動">
+                {prev ? (
+                    <a class="work-nav__link work-nav__link--prev" href={prev.path} rel="prev" data-work-nav="prev">
+                        <span class="work-nav__label">← 前の作品</span>
+                        <span class="work-nav__title">{prev.data.title}</span>
+                    </a>
+                ) : <span class="work-nav__link work-nav__link--prev" aria-hidden="true"></span>}
+                {next ? (
+                    <a class="work-nav__link work-nav__link--next" href={next.path} rel="next" data-work-nav="next">
+                        <span class="work-nav__label">次の作品 →</span>
+                        <span class="work-nav__title">{next.data.title}</span>
+                    </a>
+                ) : <span class="work-nav__link work-nav__link--next" aria-hidden="true"></span>}
+            </nav>
+        </div>
+    </div>
+
+    <Lightbox />
+</BaseLayout>
+
+<script>
+    import { isNavigationKey, loadXWidgets, onSwipe } from "../../scripts/ui";
+
+    const page = document.querySelector<HTMLElement>("#workPage");
+
+    if (page) {
+        loadXWidgets(page);
+
+        const goTo = (direction: "prev" | "next") => {
+            const link = page.querySelector<HTMLAnchorElement>(`a[data-work-nav="${direction}"]`);
+            if (link) window.location.href = link.href;
+        };
+
+        document.addEventListener("keydown", (event) => {
+            if (document.querySelector("dialog[open]")) return;
+            const direction = isNavigationKey(event);
+            if (direction) goTo(direction);
+        });
+
+        onSwipe(page, {
+            left: () => goTo("next"),
+            right: () => goTo("prev")
+        });
+    }
+</script>

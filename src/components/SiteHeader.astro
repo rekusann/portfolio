@@ -1,0 +1,128 @@
+---
+import { site } from "../data/site";
+import { assetUrl } from "../lib/works";
+
+const home = assetUrl("");
+const { email, discord } = site.contact;
+---
+
+<header class="site-header">
+    <a class="site-logo" href={home}>
+        <span class="site-logo__full">{site.name}</span>
+        <span class="site-logo__short" aria-hidden="true">n.w</span>
+    </a>
+
+    <!-- プロフィール -->
+    <div class="character-area">
+        <button class="character-button" type="button" aria-label="プロフィールを開く"
+            aria-expanded="false" aria-controls="profileBubble" data-popover-trigger>
+            <img src={assetUrl("images/logo.png")} alt="" class="character-icon">
+        </button>
+
+        <div class="popover profile-bubble" id="profileBubble" aria-hidden="true" inert>
+            <button class="popover__close" type="button" aria-label="プロフィールを閉じる" data-popover-close>×</button>
+            <p class="popover__title">Hi, I'm reku.</p>
+            <p class="popover__text">主にデザインと映像をつくっています。特にeSports・Y2Kデザインが好き。<a href={site.links.studio}
+                    target="_blank" rel="noopener noreferrer">REVATI Studio</a>で活動しています。</p>
+            <p class="popover__caption">20y/o - from ♥ Hokkaido, Japan</p>
+        </div>
+    </div>
+
+    <!-- コンタクト -->
+    <div class="contact-area">
+        <button class="contact-button" type="button" aria-expanded="false" aria-controls="contactPanel"
+            data-popover-trigger>contact</button>
+
+        <div class="popover contact-panel" id="contactPanel" aria-hidden="true" inert>
+            <button class="popover__close" type="button" aria-label="コンタクトを閉じる" data-popover-close>×</button>
+            <p class="popover__title">Contact</p>
+            <p class="popover__text">お仕事のご依頼・ご相談はこちらからお気軽にどうぞ。</p>
+
+            <ul class="contact-list">
+                <li class="contact-item">
+                    <a class="contact-link" href={`mailto:${email}`}>
+                        <span class="contact-link__label">Mail</span>
+                        <span class="contact-link__value">{email}</span>
+                    </a>
+                    <button class="contact-copy" type="button" data-copy={email}
+                        aria-label="メールアドレスをコピー">コピー</button>
+                </li>
+                <li class="contact-item">
+                    <a class="contact-link" href={discord.url} target="_blank" rel="noopener noreferrer">
+                        <span class="contact-link__label">Discord</span>
+                        <span class="contact-link__value">{discord.name} のサーバーに参加 ↗</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<script>
+    import { initCopyButtons } from "../scripts/ui";
+
+    initCopyButtons();
+
+    /* ---------- ポップオーバー（プロフィール・コンタクト） ---------- */
+    const triggers = [...document.querySelectorAll<HTMLButtonElement>("[data-popover-trigger]")];
+    const panelOf = (trigger: HTMLButtonElement) =>
+        document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+    const isOpen = (trigger: HTMLButtonElement) => trigger.getAttribute("aria-expanded") === "true";
+
+    function setOpen(trigger: HTMLButtonElement, open: boolean) {
+        const panel = panelOf(trigger);
+        if (!panel) return;
+        panel.classList.toggle("is-open", open);
+        panel.setAttribute("aria-hidden", String(!open));
+        panel.inert = !open;
+        trigger.setAttribute("aria-expanded", String(open));
+    }
+
+    triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+            const open = !isOpen(trigger);
+            triggers.forEach((other) => other !== trigger && setOpen(other, false));
+            setOpen(trigger, open);
+        });
+
+        panelOf(trigger)?.querySelector("[data-popover-close]")?.addEventListener("click", () => {
+            setOpen(trigger, false);
+            trigger.focus();
+        });
+    });
+
+    document.addEventListener("click", (event) => {
+        const target = event.target as Node;
+        triggers.forEach((trigger) => {
+            if (isOpen(trigger) && !trigger.contains(target) && !panelOf(trigger)?.contains(target)) {
+                setOpen(trigger, false);
+            }
+        });
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        triggers.forEach((trigger) => {
+            if (!isOpen(trigger)) return;
+            setOpen(trigger, false);
+            trigger.focus();
+        });
+    });
+
+    /* ---------- ランダムな間隔でキャラクターを「ぷにっ」とさせる ---------- */
+    const characterIcon = document.querySelector<HTMLElement>(".character-icon");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function scheduleSquish() {
+        if (!characterIcon || reduceMotion.matches) return;
+        window.setTimeout(() => {
+            characterIcon.classList.remove("is-squishing");
+            void characterIcon.offsetWidth; // アニメーションを再始動させるためのリフロー
+            characterIcon.classList.add("is-squishing");
+            scheduleSquish();
+        }, 3000 + Math.random() * 5000);
+    }
+
+    characterIcon?.addEventListener("animationend", () => characterIcon.classList.remove("is-squishing"));
+    scheduleSquish();
+</script>

@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { site } from "../data/site";
+import { absoluteUrl } from "../lib/works";
+
+interface Props {
+    /** ページ名。省略するとサイト名のみ */
+    title?: string;
+    description?: string;
+    /** OGP画像（public 以下のパス） */
+    image?: string;
+    imageAlt?: string;
+    type?: "website" | "article";
+}
+
+const {
+    title,
+    description = site.description,
+    image = site.ogImage,
+    imageAlt = site.name,
+    type = "website"
+} = Astro.props;
+
+const siteUrl = Astro.site ?? Astro.url;
+const pageTitle = title ? `${title} | ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = absoluteUrl(image, siteUrl);
+// 作品ページは大きい画像、それ以外（ロゴ画像）は小さいカード
+const twitterCard = type === "article" ? "summary_large_image" : "summary";
+---
+
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{pageTitle}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonical}>
+
+    <!-- OGP -->
+    <meta property="og:site_name" content={site.name}>
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:type" content={type}>
+    <meta property="og:title" content={pageTitle}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content={imageUrl}>
+    <meta property="og:image:alt" content={imageAlt}>
+
+    <!-- X (Twitter) Card -->
+    <meta name="twitter:card" content={twitterCard}>
+    <meta name="twitter:site" content={site.xHandle}>
+    <meta name="twitter:creator" content={site.xHandle}>
+</head>
+
+<body>
+    <SiteHeader />
+    <main class="site-main">
+        <slot />
+    </main>
+    <SiteFooter />
+</body>
+
+</html>

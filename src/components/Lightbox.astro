@@ -1,0 +1,84 @@
+---
+/*
+ * 画像の全画面表示。[data-lightbox-src] のボタンをクリックすると開きます。
+ * 同じ .work-detail 内に画像が複数あれば ←/→・スワイプで切り替えられます。
+ */
+---
+
+<dialog class="lightbox" id="lightbox" aria-label="画像の全画面表示">
+    <button class="lightbox__close" type="button" aria-label="全画面表示を閉じる" data-lightbox-close>×</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="前の画像" data-lightbox-prev>‹</button>
+    <img class="lightbox__image" src="" alt="">
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="次の画像" data-lightbox-next>›</button>
+    <p class="lightbox__counter" aria-live="polite"></p>
+</dialog>
+
+<script>
+    import { isNavigationKey, onSwipe } from "../scripts/ui";
+
+    const lightbox = document.querySelector<HTMLDialogElement>("#lightbox");
+
+    if (lightbox) {
+        const image = lightbox.querySelector<HTMLImageElement>(".lightbox__image")!;
+        const counter = lightbox.querySelector<HTMLElement>(".lightbox__counter")!;
+        const prevButton = lightbox.querySelector<HTMLButtonElement>("[data-lightbox-prev]")!;
+        const nextButton = lightbox.querySelector<HTMLButtonElement>("[data-lightbox-next]")!;
+        let group: HTMLElement[] = [];
+        let index = 0;
+
+        function show(nextIndex: number) {
+            if (nextIndex < 0 || nextIndex >= group.length) return;
+            index = nextIndex;
+            const item = group[index];
+            image.src = item.dataset.lightboxSrc ?? "";
+            image.alt = item.dataset.lightboxAlt ?? "";
+
+            const multiple = group.length > 1;
+            prevButton.hidden = nextButton.hidden = counter.hidden = !multiple;
+            prevButton.disabled = index === 0;
+            nextButton.disabled = index === group.length - 1;
+            counter.textContent = multiple ? `${index + 1} / ${group.length}` : "";
+        }
+
+        document.addEventListener("click", (event) => {
+            const trigger = (event.target as HTMLElement | null)?.closest<HTMLElement>("[data-lightbox-src]");
+            if (!trigger) return;
+            const scope = trigger.closest(".work-detail") ?? document;
+            group = [...scope.querySelectorAll<HTMLElement>("[data-lightbox-src]")];
+            show(Math.max(0, group.indexOf(trigger)));
+            lightbox.showModal();
+        });
+
+        prevButton.addEventListener("click", () => show(index - 1));
+        nextButton.addEventListener("click", () => show(index + 1));
+        lightbox.querySelector("[data-lightbox-close]")?.addEventListener("click", () => lightbox.close());
+
+        // 画像の外側（暗い部分）をクリックで閉じる
+        lightbox.addEventListener("click", (event) => {
+            if (event.target === lightbox) lightbox.close();
+        });
+
+        // キャプチャ段階で先に処理し、preventDefault で背後の作品送り（←/→）を止める
+        window.addEventListener(
+            "keydown",
+            (event) => {
+                if (!lightbox.open) return;
+                const direction = isNavigationKey(event);
+                if (!direction) return;
+                event.preventDefault();
+                show(direction === "prev" ? index - 1 : index + 1);
+            },
+            true
+        );
+
+        onSwipe(lightbox, {
+            left: () => show(index + 1),
+            right: () => show(index - 1)
+        });
+
+        lightbox.addEventListener("close", () => {
+            image.src = "";
+            group = [];
+        });
+    }
+</script>
