@@ -6,7 +6,6 @@ export const site = {
   name: "nihilnovem.work",
   author: "reku",
   description: "Portfolio // Graphic Design, Video Production, ...",
-  /** OGP のデフォルト画像（public 以下）。1200×630 の画像を用意したら差し替えてください */
   ogImage: "images/og.webp",
   xHandle: "@nihilnovem",
   links: {
