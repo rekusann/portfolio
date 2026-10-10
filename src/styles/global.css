@@ -690,6 +690,27 @@ body:has(dialog[open]) {
   .portfolio {
     column-count: 2;
   }
+
+  /* メタ情報は1行に収める。年は常に表示し、タイトル・カテゴリ名を「…」で省略 */
+  .meta {
+    white-space: nowrap;
+  }
+
+  .meta__title,
+  .meta__type {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .meta__info {
+    display: flex;
+    min-width: 0;
+  }
+
+  .meta__year {
+    flex: none;
+  }
 }
 
 @media (max-width: 600px) {

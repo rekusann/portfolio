@@ -63,8 +63,11 @@ const filters = [
                         <img src={assetUrl(work.data.thumbnail)} alt={thumbnailAlt(work)} loading="lazy" decoding="async" />
                     </div>
                     <div class="meta">
-                        <span>{work.data.title}</span>
-                        <span>{work.data.type} · {work.year}</span>
+                        <span class="meta__title">{work.data.title}</span>
+                        <span class="meta__info">
+                            <span class="meta__type">{work.data.type}</span>
+                            <span class="meta__year">&nbsp;· {work.year}</span>
+                        </span>
                     </div>
                 </a>
             </article>
