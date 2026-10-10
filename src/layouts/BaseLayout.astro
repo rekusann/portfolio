@@ -3,7 +3,7 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../data/site";
-import { absoluteUrl } from "../lib/works";
+import { absoluteUrl, assetUrl } from "../lib/works";
 
 interface Props {
     /** ページ名。省略するとサイト名のみ */
@@ -27,8 +27,8 @@ const siteUrl = Astro.site ?? Astro.url;
 const pageTitle = title ? `${title} | ${site.name}` : site.name;
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
 const imageUrl = absoluteUrl(image, siteUrl);
-// 作品ページは大きい画像、それ以外（ロゴ画像）は小さいカード
-const twitterCard = type === "article" ? "summary_large_image" : "summary";
+// 全ページで大きい画像のカードにする（小さい正方形サムネイルにしたいページだけ "summary"）
+const twitterCard = "summary_large_image";
 ---
 
 <html lang="ja">
@@ -39,6 +39,10 @@ const twitterCard = type === "article" ? "summary_large_image" : "summary";
     <title>{pageTitle}</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonical}>
+
+    <!-- Favicon -->
+    <link rel="icon" href={assetUrl("favicon.png")} type="image/png">
+    <link rel="apple-touch-icon" href={assetUrl("apple-touch-icon.png")}>
 
     <!-- OGP -->
     <meta property="og:site_name" content={site.name}>
