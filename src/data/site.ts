@@ -33,6 +33,7 @@ export type CategoryKey = (typeof categoryKeys)[number];
 export const categoryLabels: Record<CategoryKey, string> = {
   graphic: "グラフィックデザイン",
   video: "映像制作",
+  video_e: "動画編集",
   web: "Webデザイン",
   others: "その他"
 };
