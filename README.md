@@ -1,1 +1,2 @@
-this is my portfolio
+## ポートフォリオサイト
+- デザイン案をもとにChatGPTで構築、Claudeで再構築
