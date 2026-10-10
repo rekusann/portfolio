@@ -1,7 +1,4 @@
 # ==========================================================================
-#  作品データ
-#  上から書いた順は「日付が同じ作品同士の並び順」になります。
-#
 #  テンプレート（コピーして下に追加してください）
 #
 #  - id: sample-project                 # 固有ID（英数字・ハイフン）。URL /works/sample-project/ になります
@@ -26,15 +23,395 @@
 # ==========================================================================
 
 - id: gra-001
-  title: poster
+  title: REVATI OWCS ロスター発表告知ポスター
   type: Graphic Design / Poster
   category: graphic
-  date: "2026.10.01"
-  duration: 1日
-  client: revati
+  date: "2025.05.10"
+  duration: 3日
+  client: REVATI
   thumbnail: images/gra-001.webp
-  description: 告知画像を制作しました。
+  description: Overwatchの公式大会 “OWCS2025 JP STAGE2” に出場したeSportsチーム・REVATIのロスターの告知用画像を制作しました。
   media:
     - type: image
       src: images/gra-001.webp
       alt: esports poster
+      
+- id: gra-002
+  title: REVATI CC部門 新メンバー告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2025.05.18"
+  duration: 3日
+  client: REVATI
+  thumbnail: images/gra-002.webp
+  description: eSportsチーム・REVATIのコンテンツクリエイター部門の新メンバーを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-002.webp
+      alt: esports poster
+            
+- id: gra-003
+  title: REVATI CC部門 新メンバー告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2025.07.25"
+  duration: 5日
+  client: REVATI
+  thumbnail: images/gra-003.webp
+  description: eSportsチーム・REVATIのコンテンツクリエイター部門の新メンバーを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-003.webp
+      alt: esports poster
+            
+- id: gra-004
+  title: Toxic Hamster 新ロスター告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2025.08.01"
+  duration: 3日
+  client: REVATI
+  thumbnail: images/gra-004.webp
+  description: eSportsチーム・Toxic Hamsterの新ロスターメンバーを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-004.webp
+      alt: esports poster
+            
+- id: gra-005
+  title: REVATI Studio ブランディング
+  type: Graphic Design / Branding
+  category: graphic
+  date: "2025.07.23"
+  duration: 1ヶ月
+  client: REVATI
+  thumbnail: images/gra-005.webp
+  description: クリエイティブスタジオ・REVATI Studioのブランディング(キービジュアル・ロゴ制作)を担当しました。
+  media:
+    - type: image
+      src: images/gra-005.webp
+      alt: header
+    - type: image
+      src: images/gra-005-1.webp
+      alt: logo
+            
+- id: gra-006
+  title: REVATI Academy 新チーム告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.02.03"
+  duration: 4日
+  client: REVATI
+  thumbnail: images/gra-006.webp
+  description: eSportsチーム・REVATIのOverwatch Academy部門の新チームを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-006.webp
+      alt: esports poster
+            
+- id: gra-007
+  title: REVATI osato脱退告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.03.05"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/gra-007.webp
+  description: eSportsチーム・REVATIのコンテンツクリエイター部門に所属していたosatoさんの脱退を告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-007.webp
+      alt: esports poster
+                  
+- id: gra-008
+  title: REVATI × O2 Blast Collaborative Project 告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.03.22"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/gra-008.webp
+  description: eSportsチーム・REVATIと韓国のeSportsチーム・O2 Blastの共同プロジェクトを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-008.webp
+      alt: esports poster
+                  
+- id: gra-009
+  title: REVATI Overwatch女子部門 告知ポスター
+  type: Graphic Design / Poster & Illustration
+  category: graphic
+  date: "2026.03.26"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/gra-009.webp
+  description: eSportsチーム・REVATIのOverwatch 女子部門の新設を告知する画像およびイラストを制作しました。
+  media:
+    - type: image
+      src: images/gra-009.webp
+      alt: esports poster
+                        
+- id: gra-013
+  title: REVATI Academy 告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.04.21"
+  duration: 1日
+  client: REVATI
+  thumbnail: images/gra-013.webp
+  description: eSportsチーム・REVATIのOverwatch Academy部門に関して告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-013.webp
+      alt: esports poster
+                        
+- id: gra-011
+  title: REVATI Community Cup Gateway
+  type: Graphic Design / 配信デザイン
+  category: graphic
+  date: "2026.05.05"
+  duration: 10日
+  client: REVATI
+  thumbnail: images/gra-011.webp
+  description: eSportsチーム・REVATIが運営したOverwatchのコミュニティ大会“Gateway”の配信デザインを担当しました。
+  media:
+    - type: image
+      src: images/gra-010.webp
+      alt: design
+    - type: image
+      src: images/gra-011.webp
+      alt: design
+    - type: image
+      src: images/gra-012.webp
+      alt: design
+                        
+- id: gra-014
+  title: Slay the Spire 2 大会「コミュステ杯」キービジュアル
+  type: Graphic Design / Key Visual
+  category: graphic
+  date: "2026.04.30"
+  duration: 7日
+  client: コミュステ
+  thumbnail: images/gra-014.webp
+  description: 株式会社RegalCast eスポーツ事業部 Rise様が運営する 「コミュステ」が開催したSlay the Spire 2の大会のキービジュアルを制作しました。
+  media:
+    - type: image
+      src: images/gra-014.webp
+      alt: key visual
+    - type: x
+      src: https://x.com/the_comm_stage/status/2054149861172465958
+                        
+- id: gra-015
+  title: REVATI 破壊神こたろ 脱退告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.06.29"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/gra-015.webp
+  description: eSportsチーム・REVATIのコンテンツクリエイター部門に所属していた 破壊神こたろ さんの脱退を告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-015.webp
+      alt: esports poster
+                        
+- id: gra-016
+  title: REVATI Academy 新チーム告知ポスター
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.07.11"
+  duration: 3日
+  client: REVATI
+  thumbnail: images/gra-016.webp
+  description: eSportsチーム・REVATIのOverwatch Academy部門の新チームを告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-016.webp
+      alt: esports poster
+                        
+- id: gra-017
+  title: REVATI Overwatch部門 メンバー脱退告知ポスター
+  type: Graphic Design / Poster & Illustration
+  category: graphic
+  date: "2026.08.01"
+  duration: 3日
+  client: REVATI
+  thumbnail: images/gra-017.webp
+  description: eSportsチーム・REVATIのoverwatch部門に所属していた選手4人の脱退を告知する画像およびイラストを制作しました。
+  media:
+    - type: image
+      src: images/gra-017.webp
+      alt: esports poster
+                        
+- id: gra-018
+  title: Creator Hive サービス開始告知ポスターA
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.08.08"
+  duration: 1日
+  client: Creator Hive
+  thumbnail: images/gra-018.webp
+  description: シェアハウス事業 Creator Hive様のサービス開始を告知する画像を制作しました。※没案
+  media:
+    - type: image
+      src: images/gra-018.webp
+      alt: poster
+                              
+- id: gra-019
+  title: Creator Hive サービス開始告知ポスターB
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.08.08"
+  duration: 1日
+  client: Creator Hive
+  thumbnail: images/gra-019.webp
+  description: シェアハウス事業 Creator Hive様のサービス開始を告知する画像を制作しました。※没案
+  media:
+    - type: image
+      src: images/gra-019.webp
+      alt: poster
+                              
+- id: gra-020
+  title: Creator Hive サービス開始告知ポスターC
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.08.08"
+  duration: 1日
+  client: Creator Hive
+  thumbnail: images/gra-020.webp
+  description: シェアハウス事業 Creator Hive様のサービス開始を告知する画像を制作しました。
+  media:
+    - type: image
+      src: images/gra-020.webp
+      alt: poster
+                                    
+- id: gra-021
+  title: X ヘッダー
+  type: Graphic Design / Poster
+  category: graphic
+  date: "2026.09.12"
+  duration: 1日
+  client: 自主制作
+  thumbnail: images/gra-021.webp
+  description: X用のヘッダーを制作しました。Blenderの練習。
+  media:
+    - type: image
+      src: images/gra-021.webp
+      alt: header
+                                          
+- id: vid-001
+  title: sizumu.exe
+  type: Video Production / Ending for YouTube
+  category: video
+  date: "2025.04.28"
+  duration: 2週間
+  client: 沈む
+  thumbnail: images/vid-001.webp
+  description: 配信者の沈む 様のYouTube用エンディングを制作しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=X_w0LHofTYg
+                                                                                    
+- id: vid-002
+  title: ねこたたき
+  type: Video Production / 配信待機画面
+  category: video
+  date: "2025.05.16"
+  duration: 2週間
+  client: 沈む
+  thumbnail: images/vid-002.webp
+  description: 配信者の沈む 様の配信待機画面を制作しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=mlBynrWAXLw
+                                                                                          
+- id: vid-003
+  title: 99DIVINE OWCS ロスター発表映像
+  type: Video Production / Annoucement
+  category: video
+  date: "2025.08.09"
+  duration: 1週間
+  client: 99DIVINE
+  thumbnail: images/vid-003.webp
+  description: eSportsチーム 99DIVINE様のOWCS ロスター発表映像を制作しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=2EOMcszIYlo
+                                                                                                
+- id: vid-004
+  title: Toxic Hamster OWCS ロスター発表映像
+  type: Video Production / Annoucement
+  category: video
+  date: "2025.08.14"
+  duration: 4日
+  client: Toxic Hamster
+  thumbnail: images/vid-004.webp
+  description: eSportsチーム Toxic Hamster様のOWCS ロスター発表映像を制作しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=D0FidI7c3AE
+                                                                                                      
+- id: vid-005
+  title: REVATI Community Cup GATEWAY Web映像
+  type: Video Production / for Web
+  category: video
+  date: "2026.03.26"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/vid-005.webp
+  description: eSportsチーム・REVATIが運営したOverwatchのコミュニティ大会“Gateway”のWebサイト映像を担当しました。
+  media:
+    - type: youtube
+      src: https://youtu.be/Ynp3fbTNWp8
+                                                                                                      
+- id: vid-006
+  title: REVATI Harutoon 再加入告知映像
+  type: Video Production / Annoucement
+  category: video
+  date: "2026.05.02"
+  duration: 1日
+  client: REVATI
+  thumbnail: images/vid-006.webp
+  description: eSportsチーム・REVATIのOverwatch部門に関して告知する映像を制作しました。クリップの編集は担当していません。
+  media:
+    - type: x
+      src: https://x.com/revati_jp/status/2052312492572090744?s=20
+                                                                                                            
+- id: vid-007
+  title: REVATI Hofac CC部門加入告知映像
+  type: Video Production / Annoucement
+  category: video
+  date: "2026.06.23"
+  duration: 2日
+  client: REVATI
+  thumbnail: images/vid-007.webp
+  description: eSportsチーム・REVATIのコンテンツクリエイター部門に関して告知する映像を制作しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=jqwl7BR4BtM
+                                                                                                            
+- id: vid-008
+  title: YouTubeエンディング
+  type: Video Production / Ending for YouTube
+  category: video
+  date: "2026.08.14"
+  duration: 12日
+  client: まかろん
+  thumbnail: images/vid-008.webp
+  description: 配信者のまかろん 様のYouTube用エンディングを制作しました。
+  media:
+    - type: youtube
+      src: https://youtu.be/Sb0-Y3md0co
+                                                                                                                  
+- id: web-001
+  title: REVATI Community Cup GATEWAY Webデザイン
+  type: Web Design / LP
+  category: web
+  date: "2026.05.05"
+  duration: 2週間
+  client: REVATI
+  thumbnail: images/web-001.webp
+  description: eSportsチーム・REVATIが運営したOverwatchのコミュニティ大会“Gateway”のWebデザインを担当しました。
+  media:
+    - type: image
+      src: images/web-001.webp
