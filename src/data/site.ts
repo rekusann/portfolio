@@ -5,9 +5,9 @@
 export const site = {
   name: "nihilnovem.work",
   author: "reku",
-  description: "reku のポートフォリオ。グラフィックデザイン・映像制作・Webデザインなどの制作実績を掲載しています。",
+  description: "Portfolio // Graphic Design, Video Production, ...",
   /** OGP のデフォルト画像（public 以下）。1200×630 の画像を用意したら差し替えてください */
-  ogImage: "images/logo.png",
+  ogImage: "images/og.webp",
   xHandle: "@nihilnovem",
   links: {
     x: "https://x.com/nihilnovem",
