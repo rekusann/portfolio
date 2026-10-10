@@ -30,11 +30,21 @@ const filters = [
             ))}
         </nav>
 
-        <button class="sort-toggle" id="sortToggle" type="button"
-            aria-label="並び順：新しい順（クリックで古い順に切り替え）">
-            <span class="sort-toggle__label">新しい順</span>
-            <span class="sort-toggle__icon" aria-hidden="true">↓</span>
-        </button>
+        <div class="toolbar__controls">
+            <!-- 縮小レイアウト用：カテゴリの選択リスト（広い画面では非表示） -->
+            <label class="filter-select">
+                <span class="sr-only">カテゴリで絞り込み</span>
+                <select id="filterSelect">
+                    {filters.map(({ key, label }) => <option value={key}>{label}</option>)}
+                </select>
+            </label>
+
+            <button class="sort-toggle" id="sortToggle" type="button"
+                aria-label="並び順：新しい順（クリックで古い順に切り替え）">
+                <span class="sort-toggle__label">新しい順</span>
+                <span class="sort-toggle__icon" aria-hidden="true">↓</span>
+            </button>
+        </div>
     </section>
 
     <section class="portfolio" id="portfolio">
@@ -103,6 +113,7 @@ const filters = [
     const cards = [...document.querySelectorAll<HTMLElement>(".project")];
     const searchInput = document.querySelector<HTMLInputElement>("#searchInput")!;
     const filterButtons = [...document.querySelectorAll<HTMLButtonElement>(".filter")];
+    const filterSelect = document.querySelector<HTMLSelectElement>("#filterSelect")!;
     const sortToggle = document.querySelector<HTMLButtonElement>("#sortToggle")!;
     const emptyState = document.querySelector<HTMLElement>("#emptyState")!;
     const resultStatus = document.querySelector<HTMLElement>("#resultStatus")!;
@@ -161,6 +172,7 @@ const filters = [
             button.classList.toggle("active", isActive);
             button.setAttribute("aria-pressed", String(isActive));
         });
+        filterSelect.value = state.category;
 
         emptyState.hidden = visible !== 0;
         resultStatus.textContent = `${visible}件の作品を表示中`;
@@ -196,6 +208,12 @@ const filters = [
             applyFilter();
             syncUrl();
         });
+    });
+
+    filterSelect.addEventListener("change", () => {
+        state.category = filterSelect.value;
+        applyFilter();
+        syncUrl();
     });
 
     sortToggle.addEventListener("click", () => {
