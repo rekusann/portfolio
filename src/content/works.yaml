@@ -415,3 +415,57 @@
   media:
     - type: image
       src: images/web-001.webp
+
+- id: vid_e-001
+  title: YouTube企画「Guess The Rank!」動画
+  type: Video Editing / YouTube
+  category: video_e
+  date: "2026.02.09"
+  duration: 2週間
+  client: REVATI
+  thumbnail: images/vid_e-001.webp
+  description: eSportsチーム・REVATIのYouTube企画「Guess The Rank!」の動画編集を担当しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=kTQT8LXNgco
+    - type: youtube
+      src: https://www.youtube.com/watch?v=aLECqdpax5s
+
+- id: vid_e-002
+  title: YouTube企画「Guess The Pro!」動画
+  type: Video Editing / YouTube
+  category: video_e
+  date: "2026.05.19"
+  duration: 1週間
+  client: REVATI
+  thumbnail: images/vid_e-002.webp
+  description: eSportsチーム・REVATIのYouTube企画「Guess The Pro!」の動画編集を担当しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=eJzE6_4N87U
+
+- id: vid_e-003
+  title: YouTube企画「Guess The Rank!」動画
+  type: Video Editing / YouTube
+  category: video_e
+  date: "2026.10.04"
+  duration: 1週間
+  client: REVATI
+  thumbnail: images/vid_e-003.webp
+  description: eSportsチーム・REVATIのYouTube企画「Guess The Rank!」の動画編集を担当しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=XFo7G_Pa5Qo
+
+- id: vid_e-004
+  title: YouTube動画
+  type: Video Editing / YouTube
+  category: video_e
+  date: "2025.07.16"
+  duration: 3日
+  client: STRIKE
+  thumbnail: images/vid_e-004.webp
+  description: Overwatch プロコーチのSTRIKE様のYouTube動画編集を担当しました。
+  media:
+    - type: youtube
+      src: https://www.youtube.com/watch?v=cfdSDGF_cEg
