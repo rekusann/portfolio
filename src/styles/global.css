@@ -535,7 +535,6 @@ body:has(dialog[open]) {
   flex: 0 0 auto;
   align-items: center;
   gap: 6px;
-  margin-left: auto;
   white-space: nowrap;
 }
 
@@ -543,11 +542,56 @@ body:has(dialog[open]) {
   font-family: var(--font-latin);
 }
 
+/* カテゴリ選択リスト + 並び替え（広い画面では並び替えのみ右端に表示） */
+.toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.filter-select {
+  display: none;
+  position: relative;
+}
+
+.filter-select select {
+  height: 26px;
+  padding: 0 28px 0 10px;
+  border: 0;
+  border-radius: 4px;
+  outline: none;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.filter-select select:focus-visible {
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+/* ▼ アイコン */
+.filter-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid #a0a0a5;
+  border-bottom: 1px solid #a0a0a5;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+
 @media (max-width: 760px) {
   .toolbar {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
+    align-items: stretch;
+    gap: 12px;
     margin-bottom: 14px;
   }
 
@@ -556,11 +600,16 @@ body:has(dialog[open]) {
     width: 100%;
   }
 
+  /* 横並びのカテゴリボタン → 選択リストに切り替え */
   .filters {
-    gap: 14px 18px;
+    display: none;
   }
 
-  .sort-toggle {
+  .filter-select {
+    display: block;
+  }
+
+  .toolbar__controls {
     margin-left: 0;
   }
 }
