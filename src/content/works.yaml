@@ -411,7 +411,7 @@
   duration: 2週間
   client: REVATI
   thumbnail: images/web-001.webp
-  description: eSportsチーム・REVATIが運営したOverwatchのコミュニティ大会“Gateway”のWebデザインを担当しました。/br https://tournament.revati.jp/community/gateway
+  description: eSportsチーム・REVATIが運営したOverwatchのコミュニティ大会“Gateway”のWebデザインを担当しました。https://tournament.revati.jp/community/gateway
   media:
     - type: image
       src: images/web-001.webp
