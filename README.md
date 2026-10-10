@@ -1,7 +1,8 @@
 # nihilnovem.work
 
-reku のポートフォリオサイト。https://nihilnovem.work/
+rekuのポートフォリオサイト。https://nihilnovem.work/
 
+- デザイン案画像をもとにChatGPTで構築、Claudeで再構築
 - [Astro](https://astro.build/) 5 で作った静的サイト（サーバー不要）
 - `main` ブランチに push すると GitHub Actions がビルドし、GitHub Pages に公開される
 
