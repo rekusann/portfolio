@@ -26,7 +26,7 @@ export const site = {
    ここに追加すると、作品データの検証・絞り込みボタンの両方に反映されます
    ========================================================================== */
 
-export const categoryKeys = ["graphic", "video", "web", "others"] as const;
+export const categoryKeys = ["graphic", "video", "video_e", "web", "others"] as const;
 
 export type CategoryKey = (typeof categoryKeys)[number];
 
